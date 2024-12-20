@@ -7,10 +7,10 @@ assignees: ''
 
 ---
 
-Difficulty: X
+# Title
 
-Assignment: X
+**Difficulty**: X
 
-Description: X
+**Description**:X
 
-Steps: X
+**Steps**:X
