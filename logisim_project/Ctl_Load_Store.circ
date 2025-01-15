@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<project source="3.5.0" version="1.0">
-  This file is intended to be loaded by Logisim-evolution (https://github.com/reds-heig/logisim-evolution).
+<project source="3.9.0" version="1.0">
+  This file is intended to be loaded by Logisim-evolution v3.9.0(https://github.com/logisim-evolution/).
 
   <lib desc="#Wiring" name="0">
     <tool name="Splitter">
@@ -9,10 +9,12 @@
       <a name="incoming" val="1"/>
     </tool>
     <tool name="Pin">
+      <a name="appearance" val="classic"/>
       <a name="facing" val="north"/>
     </tool>
     <tool name="Probe">
-      <a name="facing" val="west"/>
+      <a name="appearance" val="classic"/>
+      <a name="facing" val="south"/>
       <a name="radix" val="10unsigned"/>
     </tool>
     <tool name="Tunnel">
@@ -47,54 +49,10 @@
     <tool name="OR Gate">
       <a name="size" val="30"/>
     </tool>
-    <tool name="PLA">
-      <a name="table" val=""/>
-    </tool>
   </lib>
-  <lib desc="#Plexers" name="2">
-    <tool name="Multiplexer">
-      <a name="enable" val="false"/>
-    </tool>
-    <tool name="Demultiplexer">
-      <a name="enable" val="false"/>
-    </tool>
-  </lib>
+  <lib desc="#Plexers" name="2"/>
   <lib desc="#Arithmetic" name="3"/>
-  <lib desc="#Memory" name="4">
-    <tool name="D Flip-Flop">
-      <a name="appearance" val="logisim_evolution"/>
-    </tool>
-    <tool name="T Flip-Flop">
-      <a name="appearance" val="logisim_evolution"/>
-    </tool>
-    <tool name="J-K Flip-Flop">
-      <a name="appearance" val="logisim_evolution"/>
-    </tool>
-    <tool name="S-R Flip-Flop">
-      <a name="appearance" val="logisim_evolution"/>
-    </tool>
-    <tool name="Register">
-      <a name="appearance" val="logisim_evolution"/>
-    </tool>
-    <tool name="Counter">
-      <a name="appearance" val="logisim_evolution"/>
-    </tool>
-    <tool name="Shift Register">
-      <a name="appearance" val="logisim_evolution"/>
-    </tool>
-    <tool name="Random">
-      <a name="appearance" val="logisim_evolution"/>
-    </tool>
-    <tool name="RAM">
-      <a name="appearance" val="logisim_evolution"/>
-    </tool>
-    <tool name="ROM">
-      <a name="appearance" val="logisim_evolution"/>
-      <a name="contents">addr/data: 8 8
-0
-</a>
-    </tool>
-  </lib>
+  <lib desc="#Memory" name="4"/>
   <lib desc="#I/O" name="5"/>
   <lib desc="#HDL-IP" name="6">
     <tool name="VHDL Entity">
@@ -161,9 +119,6 @@ end TCL_Generic;
   <lib desc="#Base" name="8">
     <tool name="Text Tool">
       <a name="font" val="SansSerif plain 12"/>
-      <a name="halign" val="center"/>
-      <a name="text" val=""/>
-      <a name="valign" val="base"/>
     </tool>
   </lib>
   <lib desc="#BFH-Praktika" name="9"/>
@@ -183,16 +138,10 @@ end TCL_Generic;
     <tool lib="8" name="Edit Tool"/>
     <tool lib="8" name="Text Tool">
       <a name="font" val="SansSerif plain 12"/>
-      <a name="halign" val="center"/>
-      <a name="text" val=""/>
-      <a name="valign" val="base"/>
     </tool>
     <sep/>
+    <tool lib="0" name="Pin"/>
     <tool lib="0" name="Pin">
-      <a name="appearance" val="NewPins"/>
-    </tool>
-    <tool lib="0" name="Pin">
-      <a name="appearance" val="NewPins"/>
       <a name="facing" val="west"/>
       <a name="output" val="true"/>
     </tool>
@@ -203,23 +152,8 @@ end TCL_Generic;
   <circuit name="Load_Store">
     <a name="appearance" val="custom"/>
     <a name="circuit" val="Load_Store"/>
-    <a name="circuitnamedboxfixedsize" val="false"/>
-    <a name="circuitvhdlpath" val=""/>
-    <a name="clabel" val=""/>
-    <a name="clabelfont" val="SansSerif bold 16"/>
-    <a name="clabelup" val="east"/>
+    <a name="simulationFrequency" val="8.0"/>
     <appear>
-      <circ-anchor facing="east" height="6" width="6" x="267" y="57"/>
-      <circ-port height="10" pin="590,130" width="10" x="265" y="95"/>
-      <circ-port height="10" pin="590,180" width="10" x="265" y="135"/>
-      <circ-port height="10" pin="590,250" width="10" x="265" y="55"/>
-      <circ-port height="10" pin="590,350" width="10" x="265" y="75"/>
-      <circ-port height="10" pin="590,90" width="10" x="265" y="115"/>
-      <circ-port height="8" pin="200,170" width="8" x="46" y="116"/>
-      <circ-port height="8" pin="200,250" width="8" x="46" y="136"/>
-      <circ-port height="8" pin="200,360" width="8" x="46" y="96"/>
-      <circ-port height="8" pin="200,70" width="8" x="46" y="56"/>
-      <circ-port height="8" pin="530,70" width="8" x="46" y="76"/>
       <rect fill="none" height="130" stroke="#000000" stroke-width="2" width="200" x="60" y="50"/>
       <rect height="20" stroke="none" width="200" x="60" y="160"/>
       <rect height="3" stroke="none" width="10" x="260" y="59"/>
@@ -243,57 +177,276 @@ end TCL_Generic;
       <text dominant-baseline="central" fill="#404040" font-family="SansSerif" font-size="12" text-anchor="middle" x="74" y="120">Clk</text>
       <text dominant-baseline="central" fill="#404040" font-family="SansSerif" font-size="12" text-anchor="middle" x="82" y="140">Reset</text>
       <text dominant-baseline="central" fill="#ffffff" font-family="Dialog" font-size="14" font-weight="bold" text-anchor="middle" x="159" y="170">Load_Store</text>
+      <circ-anchor facing="east" x="270" y="60"/>
+      <circ-port dir="in" pin="100,350" x="50" y="120"/>
+      <circ-port dir="in" pin="100,410" x="50" y="140"/>
+      <circ-port dir="in" pin="100,470" x="50" y="80"/>
+      <circ-port dir="in" pin="200,100" x="50" y="60"/>
+      <circ-port dir="in" pin="220,550" x="50" y="100"/>
+      <circ-port dir="out" pin="670,270" x="270" y="140"/>
+      <circ-port dir="out" pin="670,400" x="270" y="100"/>
+      <circ-port dir="out" pin="670,500" x="270" y="120"/>
+      <circ-port dir="out" pin="740,170" x="270" y="80"/>
+      <circ-port dir="out" pin="740,80" x="270" y="60"/>
     </appear>
-    <comp lib="0" loc="(200,170)" name="Pin">
+    <comp lib="0" loc="(100,350)" name="Pin">
+      <a name="appearance" val="classic"/>
       <a name="label" val="Clk"/>
     </comp>
-    <comp lib="0" loc="(200,250)" name="Pin">
+    <comp lib="0" loc="(100,410)" name="Pin">
+      <a name="appearance" val="classic"/>
       <a name="label" val="Reset"/>
     </comp>
-    <comp lib="0" loc="(200,360)" name="Pin">
-      <a name="label" val="Stack_Pointer"/>
-      <a name="width" val="32"/>
+    <comp lib="0" loc="(100,470)" name="Pin">
+      <a name="appearance" val="classic"/>
+      <a name="label" val="Enable"/>
     </comp>
-    <comp lib="0" loc="(200,70)" name="Pin">
+    <comp lib="0" loc="(110,250)" name="Tunnel">
+      <a name="facing" val="south"/>
+      <a name="label" val="Load"/>
+    </comp>
+    <comp lib="0" loc="(130,470)" name="Tunnel">
+      <a name="label" val="E"/>
+    </comp>
+    <comp lib="0" loc="(200,100)" name="Pin">
+      <a name="appearance" val="classic"/>
       <a name="label" val="Instruction"/>
       <a name="pull" val="down"/>
       <a name="tristate" val="true"/>
       <a name="width" val="16"/>
     </comp>
-    <comp lib="0" loc="(530,70)" name="Pin">
-      <a name="facing" val="south"/>
-      <a name="label" val="Enable"/>
+    <comp lib="0" loc="(200,100)" name="Splitter">
+      <a name="appear" val="center"/>
+      <a name="bit1" val="0"/>
+      <a name="bit10" val="1"/>
+      <a name="bit11" val="2"/>
+      <a name="bit12" val="none"/>
+      <a name="bit13" val="none"/>
+      <a name="bit14" val="none"/>
+      <a name="bit15" val="none"/>
+      <a name="bit2" val="0"/>
+      <a name="bit3" val="0"/>
+      <a name="bit4" val="0"/>
+      <a name="bit5" val="0"/>
+      <a name="bit6" val="0"/>
+      <a name="bit7" val="0"/>
+      <a name="bit8" val="1"/>
+      <a name="bit9" val="1"/>
+      <a name="fanout" val="3"/>
+      <a name="incoming" val="16"/>
     </comp>
-    <comp lib="0" loc="(590,130)" name="Pin">
-      <a name="facing" val="west"/>
+    <comp lib="0" loc="(220,550)" name="Pin">
+      <a name="appearance" val="classic"/>
+      <a name="label" val="Stack_Pointer"/>
+      <a name="width" val="32"/>
+    </comp>
+    <comp lib="0" loc="(230,550)" name="Tunnel">
+      <a name="label" val="Stack_Pointer"/>
+      <a name="width" val="32"/>
+    </comp>
+    <comp lib="0" loc="(300,260)" name="Tunnel">
+      <a name="label" val="Pc_Hold"/>
+    </comp>
+    <comp lib="0" loc="(310,70)" name="Bit Extender">
+      <a name="out_width" val="32"/>
+    </comp>
+    <comp lib="0" loc="(350,100)" name="Tunnel">
+      <a name="label" val="Rmd"/>
+      <a name="width" val="3"/>
+    </comp>
+    <comp lib="0" loc="(350,130)" name="Tunnel">
       <a name="label" val="Load"/>
-      <a name="output" val="true"/>
     </comp>
-    <comp lib="0" loc="(590,180)" name="Pin">
+    <comp lib="0" loc="(350,160)" name="Tunnel">
+      <a name="label" val="Store"/>
+    </comp>
+    <comp lib="0" loc="(350,70)" name="Tunnel">
+      <a name="label" val="Offset"/>
+      <a name="width" val="32"/>
+    </comp>
+    <comp lib="0" loc="(530,160)" name="Tunnel">
+      <a name="facing" val="east"/>
+      <a name="label" val="Stack_Pointer"/>
+      <a name="width" val="32"/>
+    </comp>
+    <comp lib="0" loc="(530,190)" name="Tunnel">
+      <a name="facing" val="east"/>
+      <a name="label" val="Offset"/>
+      <a name="width" val="32"/>
+    </comp>
+    <comp lib="0" loc="(530,270)" name="Tunnel">
+      <a name="facing" val="east"/>
+      <a name="label" val="Pc_Hold"/>
+    </comp>
+    <comp lib="0" loc="(530,300)" name="Tunnel">
+      <a name="facing" val="north"/>
+      <a name="label" val="Load"/>
+    </comp>
+    <comp lib="0" loc="(530,410)" name="Tunnel">
+      <a name="facing" val="east"/>
+      <a name="label" val="Store"/>
+    </comp>
+    <comp lib="0" loc="(530,510)" name="Tunnel">
+      <a name="facing" val="east"/>
+      <a name="label" val="Load"/>
+    </comp>
+    <comp lib="0" loc="(610,260)" name="Constant">
+      <a name="value" val="0x0"/>
+    </comp>
+    <comp lib="0" loc="(610,390)" name="Constant">
+      <a name="value" val="0x0"/>
+    </comp>
+    <comp lib="0" loc="(610,490)" name="Constant">
+      <a name="value" val="0x0"/>
+    </comp>
+    <comp lib="0" loc="(630,330)" name="Tunnel">
+      <a name="facing" val="north"/>
+      <a name="label" val="E"/>
+    </comp>
+    <comp lib="0" loc="(630,430)" name="Tunnel">
+      <a name="facing" val="north"/>
+      <a name="label" val="E"/>
+    </comp>
+    <comp lib="0" loc="(630,560)" name="Tunnel">
+      <a name="facing" val="north"/>
+      <a name="label" val="E"/>
+    </comp>
+    <comp lib="0" loc="(650,90)" name="Tunnel">
+      <a name="facing" val="east"/>
+      <a name="label" val="Rmd"/>
+      <a name="width" val="3"/>
+    </comp>
+    <comp lib="0" loc="(670,270)" name="Pin">
+      <a name="appearance" val="classic"/>
       <a name="facing" val="west"/>
       <a name="label" val="PC_Hold"/>
       <a name="output" val="true"/>
     </comp>
-    <comp lib="0" loc="(590,250)" name="Pin">
+    <comp lib="0" loc="(670,400)" name="Pin">
+      <a name="appearance" val="classic"/>
       <a name="facing" val="west"/>
-      <a name="label" val="Rmd"/>
+      <a name="label" val="Store"/>
       <a name="output" val="true"/>
+    </comp>
+    <comp lib="0" loc="(670,500)" name="Pin">
+      <a name="appearance" val="classic"/>
+      <a name="facing" val="west"/>
+      <a name="label" val="Load"/>
+      <a name="output" val="true"/>
+    </comp>
+    <comp lib="0" loc="(680,160)" name="Constant">
+      <a name="value" val="0x0"/>
+      <a name="width" val="32"/>
+    </comp>
+    <comp lib="0" loc="(680,70)" name="Constant">
+      <a name="value" val="0x0"/>
       <a name="width" val="3"/>
     </comp>
-    <comp lib="0" loc="(590,350)" name="Pin">
+    <comp lib="0" loc="(700,110)" name="Tunnel">
+      <a name="facing" val="north"/>
+      <a name="label" val="E"/>
+    </comp>
+    <comp lib="0" loc="(700,200)" name="Tunnel">
+      <a name="facing" val="north"/>
+      <a name="label" val="E"/>
+    </comp>
+    <comp lib="0" loc="(740,170)" name="Pin">
+      <a name="appearance" val="classic"/>
       <a name="facing" val="west"/>
       <a name="label" val="RAM_Addr"/>
       <a name="output" val="true"/>
       <a name="width" val="32"/>
     </comp>
-    <comp lib="0" loc="(590,90)" name="Pin">
+    <comp lib="0" loc="(740,80)" name="Pin">
+      <a name="appearance" val="classic"/>
       <a name="facing" val="west"/>
-      <a name="label" val="Store"/>
+      <a name="label" val="Rmd"/>
       <a name="output" val="true"/>
+      <a name="width" val="3"/>
     </comp>
-    <comp lib="8" loc="(792,160)" name="Text">
+    <comp lib="1" loc="(120,300)" name="AND Gate">
+      <a name="facing" val="south"/>
+      <a name="size" val="30"/>
+    </comp>
+    <comp lib="1" loc="(180,260)" name="NOT Gate">
+      <a name="facing" val="west"/>
+      <a name="size" val="20"/>
+    </comp>
+    <comp lib="1" loc="(330,160)" name="NOT Gate">
+      <a name="size" val="20"/>
+    </comp>
+    <comp lib="1" loc="(590,280)" name="AND Gate">
+      <a name="size" val="30"/>
+    </comp>
+    <comp lib="2" loc="(650,270)" name="Multiplexer"/>
+    <comp lib="2" loc="(650,400)" name="Multiplexer"/>
+    <comp lib="2" loc="(650,500)" name="Multiplexer"/>
+    <comp lib="2" loc="(720,170)" name="Multiplexer">
+      <a name="width" val="32"/>
+    </comp>
+    <comp lib="2" loc="(720,80)" name="Multiplexer">
+      <a name="width" val="3"/>
+    </comp>
+    <comp lib="3" loc="(610,180)" name="Adder">
+      <a name="width" val="32"/>
+    </comp>
+    <comp lib="4" loc="(160,300)" name="D Flip-Flop">
+      <a name="appearance" val="logisim_evolution"/>
+    </comp>
+    <comp lib="8" loc="(860,295)" name="Text">
       <a name="font" val="SansSerif plain 12"/>
       <a name="text" val="Delay load and hold PC for 1 cycle for the RAM to send out requested data "/>
     </comp>
+    <wire from="(100,350)" to="(150,350)"/>
+    <wire from="(100,410)" to="(180,410)"/>
+    <wire from="(100,470)" to="(130,470)"/>
+    <wire from="(110,250)" to="(110,270)"/>
+    <wire from="(120,300)" to="(120,310)"/>
+    <wire from="(120,310)" to="(150,310)"/>
+    <wire from="(130,260)" to="(130,270)"/>
+    <wire from="(130,260)" to="(180,260)"/>
+    <wire from="(180,360)" to="(180,410)"/>
+    <wire from="(200,260)" to="(240,260)"/>
+    <wire from="(210,310)" to="(240,310)"/>
+    <wire from="(220,100)" to="(350,100)"/>
+    <wire from="(220,110)" to="(220,130)"/>
+    <wire from="(220,130)" to="(290,130)"/>
+    <wire from="(220,550)" to="(230,550)"/>
+    <wire from="(220,70)" to="(220,90)"/>
+    <wire from="(220,70)" to="(270,70)"/>
+    <wire from="(240,260)" to="(240,310)"/>
+    <wire from="(240,260)" to="(300,260)"/>
+    <wire from="(290,130)" to="(290,160)"/>
+    <wire from="(290,130)" to="(350,130)"/>
+    <wire from="(290,160)" to="(310,160)"/>
+    <wire from="(310,70)" to="(350,70)"/>
+    <wire from="(330,160)" to="(350,160)"/>
+    <wire from="(530,160)" to="(550,160)"/>
+    <wire from="(530,190)" to="(570,190)"/>
+    <wire from="(530,270)" to="(560,270)"/>
+    <wire from="(530,290)" to="(530,300)"/>
+    <wire from="(530,290)" to="(560,290)"/>
+    <wire from="(530,410)" to="(620,410)"/>
+    <wire from="(530,510)" to="(620,510)"/>
+    <wire from="(550,160)" to="(550,170)"/>
+    <wire from="(550,170)" to="(570,170)"/>
+    <wire from="(590,280)" to="(620,280)"/>
+    <wire from="(610,180)" to="(690,180)"/>
+    <wire from="(610,260)" to="(620,260)"/>
+    <wire from="(610,390)" to="(620,390)"/>
+    <wire from="(610,490)" to="(620,490)"/>
+    <wire from="(630,290)" to="(630,330)"/>
+    <wire from="(630,420)" to="(630,430)"/>
+    <wire from="(630,520)" to="(630,560)"/>
+    <wire from="(650,270)" to="(670,270)"/>
+    <wire from="(650,400)" to="(670,400)"/>
+    <wire from="(650,500)" to="(670,500)"/>
+    <wire from="(650,90)" to="(690,90)"/>
+    <wire from="(680,160)" to="(690,160)"/>
+    <wire from="(680,70)" to="(690,70)"/>
+    <wire from="(700,100)" to="(700,110)"/>
+    <wire from="(700,190)" to="(700,200)"/>
+    <wire from="(720,170)" to="(740,170)"/>
+    <wire from="(720,80)" to="(740,80)"/>
   </circuit>
 </project>
