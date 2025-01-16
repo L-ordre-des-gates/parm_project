@@ -93,11 +93,11 @@ def getArithmeticOperationBinary(inst):
 
 def getSPStorageBinary(inst):
     inst[0] += "_ST"
-    return
+    return dictionnaire[inst[0]] + getBinaryFromRegister(inst[1]) + getBinaryFromImmX(inst[2],6)
 
 def getSPShiftBinary(inst):
     inst[0] += "_SH"
-    return 
+    return return dictionnaire[inst[0]] + getBinaryFromImmX(inst[2], 7)
 
 def translateInstructionInBinary(inst):
     match inst[0]:
@@ -196,9 +196,9 @@ def lire_fichier_assembleur(nom_fichier):
             inst = sanitizeInput(inst.upper().split(" "))
             if not inst or inst[0].startswith(';') or inst[0].startswith('#') or inst[0].startswith('@'):
                 continue
-            #print(inst)
+            print(inst)
             inst = translateInstructionInBinary(inst)
-            #print(inst)
+            print(inst)
             print(convertBinaryToHexa(inst), '\n')
     except FileNotFoundError:
         print(f"Erreur : Le fichier '{nom_fichier}' n'existe pas.")
