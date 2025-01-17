@@ -177,7 +177,7 @@ end TCL_Generic;
       <circ-port dir="out" pin="560,320" x="270" y="100"/>
       <circ-port dir="out" pin="600,150" x="270" y="60"/>
       <circ-port dir="out" pin="600,50" x="270" y="120"/>
-      <circ-port dir="out" pin="830,320" x="270" y="130"/>
+      <circ-port dir="out" pin="830,320" x="270" y="140"/>
     </appear>
     <comp lib="0" loc="(140,430)" name="Tunnel">
       <a name="facing" val="north"/>
@@ -439,7 +439,7 @@ end TCL_Generic;
       <a name="font" val="SansSerif plain 12"/>
       <a name="text" val="For simplification purposes, Rm is used for 1st operand both here and in the ALU."/>
     </comp>
-    <comp lib="8" loc="(337,83)" name="Text">
+    <comp lib="8" loc="(335,80)" name="Text">
       <a name="font" val="SansSerif plain 12"/>
       <a name="text" val="Pull output low on Enable = 0"/>
     </comp>

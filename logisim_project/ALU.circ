@@ -254,7 +254,7 @@
       <a name="label" val="B"/>
       <a name="width" val="32"/>
     </comp>
-    <comp lib="0" loc="(310,800)" name="Tunnel">
+    <comp lib="0" loc="(310,780)" name="Tunnel">
       <a name="facing" val="east"/>
       <a name="label" val="A"/>
       <a name="width" val="32"/>
@@ -298,10 +298,6 @@
       <a name="facing" val="east"/>
       <a name="label" val="Shift"/>
       <a name="width" val="5"/>
-    </comp>
-    <comp lib="0" loc="(350,770)" name="Constant">
-      <a name="value" val="0x0"/>
-      <a name="width" val="32"/>
     </comp>
     <comp lib="0" loc="(430,420)" name="Tunnel">
       <a name="label" val="CarryIn"/>
@@ -648,7 +644,7 @@
       <a name="shift" val="rr"/>
       <a name="width" val="32"/>
     </comp>
-    <comp lib="3" loc="(400,780)" name="Subtractor">
+    <comp lib="3" loc="(400,780)" name="Negator">
       <a name="width" val="32"/>
     </comp>
     <comp lib="3" loc="(400,860)" name="Subtractor">
@@ -681,53 +677,53 @@
     <comp lib="3" loc="(980,460)" name="Comparator">
       <a name="width" val="32"/>
     </comp>
-    <comp lib="8" loc="(253,1025)" name="Text">
+    <comp lib="8" loc="(250,1025)" name="Text">
       <a name="text" val="ORR"/>
     </comp>
-    <comp lib="8" loc="(253,1107)" name="Text">
+    <comp lib="8" loc="(250,1105)" name="Text">
       <a name="text" val="MUL"/>
     </comp>
-    <comp lib="8" loc="(253,787)" name="Text">
-      <a name="text" val="RSB"/>
-    </comp>
-    <comp lib="8" loc="(253,866)" name="Text">
-      <a name="text" val="CMP"/>
-    </comp>
-    <comp lib="8" loc="(253,946)" name="Text">
-      <a name="text" val="CMN"/>
-    </comp>
-    <comp lib="8" loc="(254,1246)" name="Text">
+    <comp lib="8" loc="(250,1245)" name="Text">
       <a name="text" val="MVN"/>
     </comp>
-    <comp lib="8" loc="(254,556)" name="Text">
+    <comp lib="8" loc="(250,555)" name="Text">
       <a name="text" val="SBC"/>
     </comp>
-    <comp lib="8" loc="(254,636)" name="Text">
+    <comp lib="8" loc="(250,635)" name="Text">
       <a name="text" val="ROR"/>
+    </comp>
+    <comp lib="8" loc="(250,785)" name="Text">
+      <a name="text" val="RSB"/>
+    </comp>
+    <comp lib="8" loc="(250,865)" name="Text">
+      <a name="text" val="CMP"/>
+    </comp>
+    <comp lib="8" loc="(250,945)" name="Text">
+      <a name="text" val="CMN"/>
+    </comp>
+    <comp lib="8" loc="(255,1185)" name="Text">
+      <a name="text" val="BIC"/>
     </comp>
     <comp lib="8" loc="(255,165)" name="Text">
       <a name="text" val="EOR"/>
     </comp>
+    <comp lib="8" loc="(255,235)" name="Text">
+      <a name="text" val="LSL"/>
+    </comp>
     <comp lib="8" loc="(255,305)" name="Text">
       <a name="text" val="LSR"/>
     </comp>
-    <comp lib="8" loc="(255,457)" name="Text">
-      <a name="text" val="ADC"/>
-    </comp>
-    <comp lib="8" loc="(256,237)" name="Text">
-      <a name="text" val="LSL"/>
-    </comp>
-    <comp lib="8" loc="(256,715)" name="Text">
-      <a name="text" val="TST"/>
-    </comp>
-    <comp lib="8" loc="(256,97)" name="Text">
-      <a name="text" val="AND"/>
-    </comp>
-    <comp lib="8" loc="(257,376)" name="Text">
+    <comp lib="8" loc="(255,375)" name="Text">
       <a name="text" val="ASR"/>
     </comp>
-    <comp lib="8" loc="(258,1186)" name="Text">
-      <a name="text" val="BIC"/>
+    <comp lib="8" loc="(255,455)" name="Text">
+      <a name="text" val="ADC"/>
+    </comp>
+    <comp lib="8" loc="(255,715)" name="Text">
+      <a name="text" val="TST"/>
+    </comp>
+    <comp lib="8" loc="(255,95)" name="Text">
+      <a name="text" val="AND"/>
     </comp>
     <comp loc="(730,1050)" name="Overflow"/>
     <comp loc="(730,1260)" name="Overflow"/>
@@ -763,7 +759,7 @@
     <wire from="(310,690)" to="(360,690)"/>
     <wire from="(310,70)" to="(360,70)"/>
     <wire from="(310,730)" to="(360,730)"/>
-    <wire from="(310,800)" to="(350,800)"/>
+    <wire from="(310,780)" to="(360,780)"/>
     <wire from="(310,840)" to="(350,840)"/>
     <wire from="(310,880)" to="(350,880)"/>
     <wire from="(310,920)" to="(350,920)"/>
@@ -797,9 +793,6 @@
     <wire from="(350,620)" to="(360,620)"/>
     <wire from="(350,640)" to="(350,650)"/>
     <wire from="(350,640)" to="(360,640)"/>
-    <wire from="(350,770)" to="(360,770)"/>
-    <wire from="(350,790)" to="(350,800)"/>
-    <wire from="(350,790)" to="(360,790)"/>
     <wire from="(350,840)" to="(350,850)"/>
     <wire from="(350,850)" to="(360,850)"/>
     <wire from="(350,870)" to="(350,880)"/>
