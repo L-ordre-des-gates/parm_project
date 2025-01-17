@@ -142,16 +142,32 @@ def getSPShiftBinary(inst):
     inst[2] = divideImmX(inst[2],4)
     return dictionnaire[inst[0]] + getBinaryFromImmX(inst[2], 7)
 
-def getLabelReference(labelName, sizeImm = 8):
-    label = str(format(int(labels[labelName]), "b"))
-    print(label," -> ",sizeImm)
-    return shiftBit(label,sizeImm)
+def getLabelReference(labelName, pc, sizeImm = 8):
+    labelIndex = int(labels[labelName]) - pc - 3
+    return TwosComplement(labelIndex, sizeImm)
 
-def getBranchBinary(inst):
-    if(len(inst[0]) == 1): return dictionnaire[inst[0]] + getLabelReference(inst[1],11)
-    return dictionnaire[inst[0]] + getLabelReference(inst[1])
 
-def translateInstructionInBinary(inst):
+def getBranchBinary(inst, pc):
+    if(len(inst[0]) == 1): return dictionnaire[inst[0]] + getLabelReference(inst[1], pc, 11)
+    return dictionnaire[inst[0]] + getLabelReference(inst[1], pc)
+
+def TwosComplement(integer, size):
+    if(integer < 0): integer *= -1
+    binary = str(format(integer, "b"))
+    binary = shiftBit(binary, size)
+
+    reversed = ""
+    for i in range(len(binary)):
+        if(binary[i] == "1"): reversed += "0"
+        else: reversed += "1"
+
+    print("reversed ",reversed)
+
+    binary = int(reversed, 2) + 1
+    if(binary >= 2**size): return str(format(binary, "b"))[1:]
+    return str(format(binary, "b"))
+
+def translateInstructionInBinary(inst, pc):
     match inst[0]:
 
         case "LSLS":
@@ -242,46 +258,46 @@ def translateInstructionInBinary(inst):
 #       BRANCH
 
         case "BEQ":
-            binary = getBranchBinary(inst) 
+            binary = getBranchBinary(inst, pc) 
 
         case "BNE":
-            binary = getBranchBinary(inst) 
+            binary = getBranchBinary(inst, pc) 
 
         case "BCS":
-            binary = getBranchBinary(inst) 
+            binary = getBranchBinary(inst, pc) 
 
         case "BCC":
-            binary = getBranchBinary(inst) 
+            binary = getBranchBinary(inst, pc) 
 
         case "BMI":
-            binary = getBranchBinary(inst) 
+            binary = getBranchBinary(inst, pc) 
 
         case "BPL":
-            binary = getBranchBinary(inst) 
+            binary = getBranchBinary(inst, pc) 
 
         case "BVS":
-            binary = getBranchBinary(inst) 
+            binary = getBranchBinary(inst, pc) 
 
         case "BHI":
-            binary = getBranchBinary(inst) 
+            binary = getBranchBinary(inst, pc) 
 
         case "BLS":
-            binary = getBranchBinary(inst) 
+            binary = getBranchBinary(inst, pc) 
 
         case "BGE":
-            binary = getBranchBinary(inst) 
+            binary = getBranchBinary(inst, pc) 
 
         case "BLT":
-            binary = getBranchBinary(inst) 
+            binary = getBranchBinary(inst, pc) 
 
         case "BLE":
-            binary = getBranchBinary(inst) 
+            binary = getBranchBinary(inst, pc) 
 
         case "BAL":
-            binary = getBranchBinary(inst)
+            binary = getBranchBinary(inst, pc)
         
         case "B":
-            binary = getBranchBinary(inst)
+            binary = getBranchBinary(inst, pc)
 
         case _: 
             return ""
@@ -312,7 +328,7 @@ def lire_fichier_assembleur(nom_fichier):
 
     hexadecimals = []
     filteredInstructions = []
-    PC = 0
+    pc = 0
 
     try:
         with open(nom_fichier, 'r') as fichier:
@@ -325,16 +341,18 @@ def lire_fichier_assembleur(nom_fichier):
             if not inst or inst[0].startswith(';') or inst[0].startswith('#') or inst[0].startswith('@'):
                 continue
             elif (inst[0].startswith('.')): 
-                labels[inst[0][0:len(inst[0])-1]] = PC
+                labels[inst[0][0:len(inst[0])-1]] = pc
                 continue
-            PC += 1
+            pc += 1
             filteredInstructions.append(inst)
         
         print(labels)
 
+        pc = 0
         for filteredInst in filteredInstructions:
             print(filteredInst)
-            filteredInst = translateInstructionInBinary(filteredInst)
+            filteredInst = translateInstructionInBinary(filteredInst, pc)
+            pc += 1
             print(filteredInst)
             hexadecimals.append(convertBinaryToHexa(filteredInst))
 
@@ -347,5 +365,4 @@ def lire_fichier_assembleur(nom_fichier):
 
 nom_fichier = "/home/superdri/Documents/Polytech/si3/s5/architecture/parm_project/code_asm/test_integration/conditional/branch.s"
 print(lire_fichier_assembleur(nom_fichier))
-
 
