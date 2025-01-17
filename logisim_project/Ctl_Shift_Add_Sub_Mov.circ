@@ -358,6 +358,11 @@ end TCL_Generic;
       <a name="facing" val="west"/>
       <a name="value" val="0x0"/>
     </comp>
+    <comp lib="0" loc="(520,110)" name="Tunnel">
+      <a name="facing" val="east"/>
+      <a name="label" val="Imm8"/>
+      <a name="width" val="8"/>
+    </comp>
     <comp lib="0" loc="(530,540)" name="Tunnel">
       <a name="facing" val="east"/>
       <a name="label" val="Rd2_Rdn"/>
@@ -424,11 +429,6 @@ end TCL_Generic;
       <a name="label" val="Choice"/>
       <a name="width" val="5"/>
     </comp>
-    <comp lib="0" loc="(580,110)" name="Tunnel">
-      <a name="facing" val="east"/>
-      <a name="label" val="Imm8"/>
-      <a name="width" val="8"/>
-    </comp>
     <comp lib="0" loc="(580,150)" name="Tunnel">
       <a name="facing" val="east"/>
       <a name="label" val="Rm2_Imm3"/>
@@ -442,6 +442,9 @@ end TCL_Generic;
       <a name="facing" val="east"/>
       <a name="label" val="Choice"/>
       <a name="width" val="5"/>
+    </comp>
+    <comp lib="0" loc="(580,70)" name="Bit Extender">
+      <a name="out_width" val="32"/>
     </comp>
     <comp lib="0" loc="(60,280)" name="Splitter">
       <a name="bit1" val="0"/>
@@ -655,6 +658,9 @@ end TCL_Generic;
     <comp lib="3" loc="(390,240)" name="Comparator">
       <a name="width" val="5"/>
     </comp>
+    <comp lib="3" loc="(630,70)" name="Negator">
+      <a name="width" val="32"/>
+    </comp>
     <comp lib="8" loc="(180,865)" name="Text">
       <a name="font" val="SansSerif plain 12"/>
       <a name="text" val="Enable carry for SUB since it is reversed in ALU"/>
@@ -725,8 +731,12 @@ end TCL_Generic;
     <wire from="(400,250)" to="(400,280)"/>
     <wire from="(410,310)" to="(410,340)"/>
     <wire from="(420,190)" to="(420,280)"/>
+    <wire from="(520,110)" to="(530,110)"/>
+    <wire from="(530,110)" to="(590,110)"/>
     <wire from="(530,540)" to="(680,540)"/>
     <wire from="(530,570)" to="(590,570)"/>
+    <wire from="(530,70)" to="(530,110)"/>
+    <wire from="(530,70)" to="(540,70)"/>
     <wire from="(550,1020)" to="(570,1020)"/>
     <wire from="(550,730)" to="(560,730)"/>
     <wire from="(550,760)" to="(570,760)"/>
@@ -745,10 +755,10 @@ end TCL_Generic;
     <wire from="(570,760)" to="(580,760)"/>
     <wire from="(570,940)" to="(570,1000)"/>
     <wire from="(570,940)" to="(580,940)"/>
-    <wire from="(580,110)" to="(590,110)"/>
     <wire from="(580,150)" to="(590,150)"/>
     <wire from="(580,180)" to="(600,180)"/>
     <wire from="(580,220)" to="(600,220)"/>
+    <wire from="(580,70)" to="(590,70)"/>
     <wire from="(580,760)" to="(580,800)"/>
     <wire from="(580,760)" to="(590,760)"/>
     <wire from="(580,940)" to="(580,1000)"/>
@@ -798,6 +808,7 @@ end TCL_Generic;
     <wire from="(630,350)" to="(630,400)"/>
     <wire from="(630,570)" to="(630,600)"/>
     <wire from="(630,570)" to="(640,570)"/>
+    <wire from="(630,70)" to="(670,70)"/>
     <wire from="(630,760)" to="(630,800)"/>
     <wire from="(630,980)" to="(630,1000)"/>
     <wire from="(630,980)" to="(640,980)"/>
@@ -828,12 +839,11 @@ end TCL_Generic;
     <wire from="(660,780)" to="(670,780)"/>
     <wire from="(660,980)" to="(660,1000)"/>
     <wire from="(660,980)" to="(670,980)"/>
-    <wire from="(670,150)" to="(670,200)"/>
-    <wire from="(670,150)" to="(680,150)"/>
     <wire from="(670,380)" to="(670,400)"/>
     <wire from="(670,380)" to="(680,380)"/>
     <wire from="(670,580)" to="(670,600)"/>
     <wire from="(670,580)" to="(700,580)"/>
+    <wire from="(670,70)" to="(670,200)"/>
     <wire from="(670,780)" to="(670,800)"/>
     <wire from="(670,780)" to="(680,780)"/>
     <wire from="(670,980)" to="(670,1000)"/>
@@ -1100,7 +1110,7 @@ end TCL_Generic;
     <a name="simulationFrequency" val="128.0"/>
     <comp lib="0" loc="(140,130)" name="Pin">
       <a name="appearance" val="NewPins"/>
-      <a name="label" val="A"/>
+      <a name="label" val="E"/>
       <a name="width" val="5"/>
     </comp>
     <comp lib="0" loc="(170,80)" name="Splitter">
