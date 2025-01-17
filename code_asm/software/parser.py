@@ -144,14 +144,14 @@ def getSPShiftBinary(inst):
 
 def getLabelReference(labelName, pc, sizeImm = 8):
     labelIndex = int(labels[labelName]) - pc - 3
-    return TwosComplement(labelIndex, sizeImm)
+    return t(labelIndex, sizeImm)
 
 
 def getBranchBinary(inst, pc):
     if(len(inst[0]) == 1): return dictionnaire[inst[0]] + getLabelReference(inst[1], pc, 11)
     return dictionnaire[inst[0]] + getLabelReference(inst[1], pc)
 
-def TwosComplement(integer, size):
+def t(integer, size):
     if(integer < 0): integer *= -1
     binary = str(format(integer, "b"))
     binary = shiftBit(binary, size)
@@ -161,10 +161,8 @@ def TwosComplement(integer, size):
         if(binary[i] == "1"): reversed += "0"
         else: reversed += "1"
 
-    print("reversed ",reversed)
-
     binary = int(reversed, 2) + 1
-    if(binary >= 2**size): return str(format(binary, "b"))[1:]
+    if(binary >= 2**size): return str(format(binary, "b"))[-size:]
     return str(format(binary, "b"))
 
 def translateInstructionInBinary(inst, pc):
@@ -365,4 +363,3 @@ def lire_fichier_assembleur(nom_fichier):
 
 nom_fichier = "/home/superdri/Documents/Polytech/si3/s5/architecture/parm_project/code_asm/test_integration/conditional/branch.s"
 print(lire_fichier_assembleur(nom_fichier))
-
