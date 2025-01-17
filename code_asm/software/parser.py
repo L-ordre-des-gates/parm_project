@@ -1,4 +1,3 @@
-
 dictionnaire = {
 
 #   REGISTER OPERATIONS
@@ -36,19 +35,53 @@ dictionnaire = {
     "MVNS_DP": "0100001111",
 
 #   SP STORAGE
-    "STR_ST":     "10010",
-    "LDR_ST":     "10011",
+    "STR_ST":  "10010",
+    "LDR_ST":  "10011",
 
 #   SP SHIFT
-    "ADD_SH":     "101100000",
-    "SUB_SH":     "101100001",
+    "ADD_SH":  "101100000",
+    "SUB_SH":  "101100001",
+
+#   CONDITIONAL BRANCH
+    "BEQ":     "11010000",
+    "BNE":     "11010001",
+    "BCS":     "11010010",
+    "BCC":     "11010011",
+    "BMI":     "11010100",
+    "BPL":     "11010101",
+    "BVS":     "11010110",
+    "BHI":     "11011000",
+    "BLS":     "11011001",
+    "BGE":     "11011010",
+    "BLT":     "11011011",
+    "BLE":     "11011101",
+    "BAL":     "11011110",
+
+#   BRANCH
+    "B":       "11100"
+
 }
+
+labels = {}
+
+def splitInstruction(inst):
+    
+    splitedInstruction = inst.split(' ', 1)
+    if(len(splitedInstruction) > 1):  
+        instruction = splitedInstruction[0].strip()
+        arguments = [arg.strip() for arg in splitedInstruction[1].split(',')]
+        return [instruction] + arguments
+    return splitedInstruction
 
 def isA(data, type):
     data = data.strip()
     if(data[0] == type): return True
     return False
 
+def shiftBit(binary, size):
+    save = binary
+    for i in range(size - len(save)): save = "0" + save
+    return save
 
 def getBinaryFromRegister(register):
     register = register.strip()
@@ -56,9 +89,11 @@ def getBinaryFromRegister(register):
 
     if(len(registerBinary) == 3): return registerBinary
 
-    for i in range(3 - len(registerBinary)): registerBinary = "0" + registerBinary
+#    for i in range(3 - len(registerBinary)): registerBinary = "0" + registerBinary
+#    return registerBinary
 
-    return registerBinary
+    return shiftBit(registerBinary, 3)
+
 
 
 def getBinaryFromImmX(imm, size):
@@ -67,10 +102,14 @@ def getBinaryFromImmX(imm, size):
 
     if(len(immBinary) == size): return immBinary
 
-    for i in range(size - len(immBinary)): immBinary = "0" + immBinary
+#    for i in range(size - len(immBinary)): immBinary = "0" + immBinary
+#    return immBinary
 
-    return immBinary
+    return shiftBit(immBinary,size)
 
+def divideImmX(imm, diviser):
+    imm = imm.strip()
+    return "#" + str(int(imm[1:])//diviser)
 
 def getDataProcessingBinary(inst):
     inst[0] += "_DP"
@@ -84,7 +123,7 @@ def getArithmeticOperationBinary(inst):
     if(len(inst) == 4):
         if(isA(inst[3],"R")): 
             inst[0] += "_AOR"
-            return dictonnaire[inst[0]] + getBinaryFromRegister(inst[3]) + getBinaryFromRegister(inst[2]) + getBinaryFromRegister(inst[1])
+            return dictionnaire[inst[0]] + getBinaryFromRegister(inst[3]) + getBinaryFromRegister(inst[2]) + getBinaryFromRegister(inst[1])
         else: 
             inst[0] += "_AOI"
             return dictionnaire[inst[0]] + getBinaryFromImmX(inst[3],3) + getBinaryFromRegister(inst[2]) + getBinaryFromRegister(inst[1])
@@ -93,14 +132,28 @@ def getArithmeticOperationBinary(inst):
 
 def getSPStorageBinary(inst):
     inst[0] += "_ST"
-    return dictionnaire[inst[0]] + getBinaryFromRegister(inst[1]) + getBinaryFromImmX(inst[2],6)
+    stripedInst = inst[3].strip()
+    inst[3] = stripedInst[0:len(stripedInst) - 1]
+    inst[3] = divideImmX(inst[3],4)
+    return dictionnaire[inst[0]] + getBinaryFromRegister(inst[1]) + getBinaryFromImmX(inst[3],8)
 
 def getSPShiftBinary(inst):
     inst[0] += "_SH"
-    return return dictionnaire[inst[0]] + getBinaryFromImmX(inst[2], 7)
+    inst[2] = divideImmX(inst[2],4)
+    return dictionnaire[inst[0]] + getBinaryFromImmX(inst[2], 7)
+
+def getLabelReference(labelName, sizeImm = 8):
+    label = str(format(int(labels[labelName]), "b"))
+    print(label," -> ",sizeImm)
+    return shiftBit(label,sizeImm)
+
+def getBranchBinary(inst):
+    if(len(inst[0]) == 1): return dictionnaire[inst[0]] + getLabelReference(inst[1],11)
+    return dictionnaire[inst[0]] + getLabelReference(inst[1])
 
 def translateInstructionInBinary(inst):
     match inst[0]:
+
         case "LSLS":
             if(len(inst) == 4):
                 binary = getRegisterOpBinary(inst)
@@ -170,6 +223,66 @@ def translateInstructionInBinary(inst):
         case "MVNS":
             binary = getDataProcessingBinary(inst)
 
+#       LOAD/STORE
+
+        case "STR":
+            binary = getSPStorageBinary(inst)
+
+        case "LDR":
+            binary = getSPStorageBinary(inst)
+
+#       MISCELLANEOUS
+
+        case "ADD":
+            binary = getSPShiftBinary(inst)
+
+        case "SUB":
+            binary = getSPShiftBinary(inst)
+        
+#       BRANCH
+
+        case "BEQ":
+            binary = getBranchBinary(inst) 
+
+        case "BNE":
+            binary = getBranchBinary(inst) 
+
+        case "BCS":
+            binary = getBranchBinary(inst) 
+
+        case "BCC":
+            binary = getBranchBinary(inst) 
+
+        case "BMI":
+            binary = getBranchBinary(inst) 
+
+        case "BPL":
+            binary = getBranchBinary(inst) 
+
+        case "BVS":
+            binary = getBranchBinary(inst) 
+
+        case "BHI":
+            binary = getBranchBinary(inst) 
+
+        case "BLS":
+            binary = getBranchBinary(inst) 
+
+        case "BGE":
+            binary = getBranchBinary(inst) 
+
+        case "BLT":
+            binary = getBranchBinary(inst) 
+
+        case "BLE":
+            binary = getBranchBinary(inst) 
+
+        case "BAL":
+            binary = getBranchBinary(inst)
+        
+        case "B":
+            binary = getBranchBinary(inst)
+
         case _: 
             return ""
     return binary
@@ -179,7 +292,14 @@ def sanitizeInput(input):
     return [inst for inst in input if inst.strip()]
 
 def convertBinaryToHexa(binary):
-    return hex(int(binary,2))[2:]
+    hexa = hex(int(binary,2))[2:]
+    if(len(hexa) == 4): return hexa
+
+    for i in range(0,4-len(hexa)):
+        hexa = "0" + hexa
+    return hexa
+
+#   return shiftBit(hexa,4)
 
 
 def lire_fichier_assembleur(nom_fichier):
@@ -189,21 +309,43 @@ def lire_fichier_assembleur(nom_fichier):
 
     :param nom_fichier: Le chemin vers le fichier assembleur.
     """
+
+    hexadecimals = []
+    filteredInstructions = []
+    PC = 0
+
     try:
         with open(nom_fichier, 'r') as fichier:
             instructions = fichier.read().splitlines()
+            # Filter empty elements
+            instructions = [line for line in instructions if line.strip()]
+
         for inst in instructions:
-            inst = sanitizeInput(inst.upper().split(" "))
+            inst = sanitizeInput(splitInstruction(inst.upper()))
             if not inst or inst[0].startswith(';') or inst[0].startswith('#') or inst[0].startswith('@'):
                 continue
-            print(inst)
-            inst = translateInstructionInBinary(inst)
-            print(inst)
-            print(convertBinaryToHexa(inst), '\n')
+            elif (inst[0].startswith('.')): 
+                labels[inst[0][0:len(inst[0])-1]] = PC
+                continue
+            PC += 1
+            filteredInstructions.append(inst)
+        
+        print(labels)
+
+        for filteredInst in filteredInstructions:
+            print(filteredInst)
+            filteredInst = translateInstructionInBinary(filteredInst)
+            print(filteredInst)
+            hexadecimals.append(convertBinaryToHexa(filteredInst))
+
     except FileNotFoundError:
         print(f"Erreur : Le fichier '{nom_fichier}' n'existe pas.")
     except Exception as e:
         print(f"Une erreur est survenue : {e}")
+    
+    return hexadecimals
 
-nom_fichier = "/home/superdri/Documents/Polytech/si3/s5/architecture/parm_project/code_asm/test_integration/data_processing/5-10_instructions.s"
-lire_fichier_assembleur(nom_fichier)
+nom_fichier = "/home/superdri/Documents/Polytech/si3/s5/architecture/parm_project/code_asm/test_integration/conditional/branch.s"
+print(lire_fichier_assembleur(nom_fichier))
+
+
