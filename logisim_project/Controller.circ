@@ -123,10 +123,10 @@ end TCL_Generic;
   <lib desc="file#Ctl_Data_Processing.circ" name="10"/>
   <lib desc="file#Ctl_Flags_APSR.circ" name="11"/>
   <lib desc="file#Ctl_Shift_Add_Sub_Mov.circ" name="12"/>
-  <lib desc="file#Ctl_Conditional.circ" name="13"/>
-  <lib desc="file#Ctl_SP_Address.circ" name="14"/>
-  <lib desc="file#Ctl_Load_Store.circ" name="15"/>
-  <lib desc="file#Ctl_Opcode_Decoder.circ" name="16"/>
+  <lib desc="file#Ctl_Load_Store.circ" name="13"/>
+  <lib desc="file#Ctl_Opcode_Decoder.circ" name="14"/>
+  <lib desc="file#Ctl_SP_Address.circ" name="15"/>
+  <lib desc="file#Ctl_Conditional.circ" name="16"/>
   <main name="Controller"/>
   <options>
     <a name="gateUndefined" val="ignore"/>
@@ -216,9 +216,9 @@ end TCL_Generic;
       <circ-port dir="out" pin="1320,550" x="220" y="320"/>
       <circ-port dir="out" pin="1320,70" x="220" y="300"/>
       <circ-port dir="out" pin="1320,710" x="220" y="80"/>
-      <circ-port dir="out" pin="1320,780" x="220" y="100"/>
-      <circ-port dir="out" pin="1320,820" x="220" y="120"/>
       <circ-port dir="out" pin="1320,890" x="220" y="340"/>
+      <circ-port dir="out" pin="1330,780" x="220" y="100"/>
+      <circ-port dir="out" pin="1330,810" x="220" y="120"/>
       <circ-port dir="out" pin="1340,1160" x="220" y="60"/>
     </appear>
     <comp lib="0" loc="(100,530)" name="Pin">
@@ -317,24 +317,24 @@ end TCL_Generic;
       <a name="output" val="true"/>
       <a name="width" val="32"/>
     </comp>
-    <comp lib="0" loc="(1320,780)" name="Pin">
-      <a name="appearance" val="classic"/>
-      <a name="facing" val="west"/>
-      <a name="label" val="Load"/>
-      <a name="output" val="true"/>
-    </comp>
-    <comp lib="0" loc="(1320,820)" name="Pin">
-      <a name="appearance" val="classic"/>
-      <a name="facing" val="west"/>
-      <a name="label" val="Store"/>
-      <a name="output" val="true"/>
-    </comp>
     <comp lib="0" loc="(1320,890)" name="Pin">
       <a name="appearance" val="classic"/>
       <a name="facing" val="west"/>
       <a name="label" val="SP"/>
       <a name="output" val="true"/>
       <a name="width" val="32"/>
+    </comp>
+    <comp lib="0" loc="(1330,780)" name="Pin">
+      <a name="appearance" val="classic"/>
+      <a name="facing" val="west"/>
+      <a name="label" val="Load"/>
+      <a name="output" val="true"/>
+    </comp>
+    <comp lib="0" loc="(1330,810)" name="Pin">
+      <a name="appearance" val="classic"/>
+      <a name="facing" val="west"/>
+      <a name="label" val="Store"/>
+      <a name="output" val="true"/>
     </comp>
     <comp lib="0" loc="(1340,1160)" name="Pin">
       <a name="appearance" val="classic"/>
@@ -428,10 +428,10 @@ end TCL_Generic;
     <comp lib="10" loc="(920,390)" name="Data_Processing"/>
     <comp lib="11" loc="(920,530)" name="Flags_APSR"/>
     <comp lib="12" loc="(920,210)" name="Shift_Add_Sub_Mov"/>
-    <comp lib="13" loc="(900,1090)" name="Conditional"/>
-    <comp lib="14" loc="(990,880)" name="SP_Address"/>
-    <comp lib="15" loc="(920,690)" name="Load_Store"/>
-    <comp lib="16" loc="(520,240)" name="Opcode_Decoder"/>
+    <comp lib="13" loc="(920,690)" name="Load_Store"/>
+    <comp lib="14" loc="(520,240)" name="Opcode_Decoder"/>
+    <comp lib="15" loc="(990,880)" name="SP_Address"/>
+    <comp lib="16" loc="(900,1090)" name="Conditional"/>
     <comp lib="2" loc="(1270,70)" name="Multiplexer"/>
     <comp lib="3" loc="(1000,1080)" name="Adder">
       <a name="width" val="16"/>
@@ -525,17 +525,17 @@ end TCL_Generic;
     <wire from="(1200,210)" to="(1320,210)"/>
     <wire from="(1210,80)" to="(1210,150)"/>
     <wire from="(1210,80)" to="(1240,80)"/>
-    <wire from="(1220,750)" to="(1220,820)"/>
-    <wire from="(1220,820)" to="(1320,820)"/>
     <wire from="(1250,110)" to="(1320,110)"/>
-    <wire from="(1250,730)" to="(1250,780)"/>
-    <wire from="(1250,780)" to="(1320,780)"/>
     <wire from="(1250,90)" to="(1250,110)"/>
+    <wire from="(1260,750)" to="(1260,810)"/>
+    <wire from="(1260,810)" to="(1330,810)"/>
     <wire from="(1270,70)" to="(1320,70)"/>
     <wire from="(1280,360)" to="(1320,360)"/>
     <wire from="(1280,410)" to="(1320,410)"/>
     <wire from="(1280,450)" to="(1320,450)"/>
     <wire from="(1280,490)" to="(1320,490)"/>
+    <wire from="(1280,730)" to="(1280,780)"/>
+    <wire from="(1280,780)" to="(1330,780)"/>
     <wire from="(130,230)" to="(190,230)"/>
     <wire from="(1310,850)" to="(1310,890)"/>
     <wire from="(1310,890)" to="(1320,890)"/>
@@ -590,10 +590,10 @@ end TCL_Generic;
     <wire from="(520,280)" to="(570,280)"/>
     <wire from="(520,300)" to="(550,300)"/>
     <wire from="(520,320)" to="(530,320)"/>
-    <wire from="(530,1090)" to="(700,1090)"/>
-    <wire from="(530,320)" to="(530,1090)"/>
-    <wire from="(550,300)" to="(550,900)"/>
-    <wire from="(550,900)" to="(700,900)"/>
+    <wire from="(530,320)" to="(530,900)"/>
+    <wire from="(530,900)" to="(700,900)"/>
+    <wire from="(550,1090)" to="(700,1090)"/>
+    <wire from="(550,300)" to="(550,1090)"/>
     <wire from="(560,1130)" to="(560,1160)"/>
     <wire from="(560,1130)" to="(700,1130)"/>
     <wire from="(570,100)" to="(1110,100)"/>
@@ -654,8 +654,8 @@ end TCL_Generic;
     <wire from="(920,530)" to="(930,530)"/>
     <wire from="(920,690)" to="(1140,690)"/>
     <wire from="(920,710)" to="(1320,710)"/>
-    <wire from="(920,730)" to="(1250,730)"/>
-    <wire from="(920,750)" to="(1220,750)"/>
+    <wire from="(920,730)" to="(1280,730)"/>
+    <wire from="(920,750)" to="(1260,750)"/>
     <wire from="(920,770)" to="(1160,770)"/>
     <wire from="(930,530)" to="(930,550)"/>
     <wire from="(930,550)" to="(1320,550)"/>
