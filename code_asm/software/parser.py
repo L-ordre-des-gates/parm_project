@@ -1,3 +1,5 @@
+import re
+
 dictionnaire = {
 
 #   REGISTER OPERATIONS
@@ -65,8 +67,7 @@ dictionnaire = {
 
 labels = {}
 
-
-def splitInstruction(inst):
+def split_instruction(inst):
     
     '''_summary_
     
@@ -78,15 +79,11 @@ def splitInstruction(inst):
     Returns:
         List: List of every components of the instruction
     '''
-    
-    splitedInstruction = inst.split(' ', 1)
-    if(len(splitedInstruction) > 1):  
-        instruction = splitedInstruction[0].strip()
-        arguments = [arg.strip() for arg in splitedInstruction[1].split(',')]
-        return [instruction] + arguments
-    return splitedInstruction
 
-def isA(data, type):
+    components = re.split(r'[\t, ]+', inst.strip())
+    return [comp for comp in components if comp]
+
+def is_a(data, type):
     
     '''_summary_
 
@@ -104,7 +101,7 @@ def isA(data, type):
     if(data[0] == type): return True
     return False
 
-def shiftBit(binary, size):
+def shift_bit(binary, size):
     '''_summary_
     
     format the binary to fit with the given size by shifting the bit representation
@@ -118,11 +115,11 @@ def shiftBit(binary, size):
     '''
 
     save = binary
-    for i in range(size - len(save)): save = "0" + save
+    for _ in range(size - len(save)): save = "0" + save
     return save
 
 
-def getBinaryFromRegister(register):
+def get_binary_from_register(register):
     '''_summary_
     
     Get the binary representation of the register number
@@ -136,14 +133,14 @@ def getBinaryFromRegister(register):
     '''
     
     register = register.strip()
-    registerBinary = str(format(int(register[1]),"b"))
+    register_binary = str(format(int(register[1]),"b"))
 
-    if(len(registerBinary) == 3): return registerBinary
+    if(len(register_binary) == 3): return register_binary
 
-    return shiftBit(registerBinary, 3)
+    return shift_bit(register_binary, 3)
 
 
-def getBinaryFromImmX(imm, size):
+def get_binary_from_immx(imm, size):
     '''_summary_
 
     Convert an immediate value to a binary representation with the specified size
@@ -157,14 +154,14 @@ def getBinaryFromImmX(imm, size):
     '''
     
     imm = imm.strip("")
-    immBinary = str(format(int(imm[1:]),"b"))
+    imm_binary = str(format(int(imm[1:]),"b"))
 
-    if(len(immBinary) == size): return immBinary
+    if(len(imm_binary) == size): return imm_binary
 
-    return shiftBit(immBinary,size)
+    return shift_bit(imm_binary,size)
 
 
-def divideImmX(imm, divisor):
+def divide_immx(imm, divisor):
     '''_summary_
 
     Divide the immediate value by the given divisor and return the result as a string
@@ -181,7 +178,7 @@ def divideImmX(imm, divisor):
     return "#" + str(int(imm[1:])//divisor)
 
 
-def getDataProcessingBinary(inst):
+def get_data_processing_binary(inst):
     '''_summary_
 
     Generate the binary encoding for a data processing instruction
@@ -193,9 +190,9 @@ def getDataProcessingBinary(inst):
         String: Return the binary encoding for the given data processing instruction
     '''
     inst[0] += "_DP"
-    return dictionnaire[inst[0]] + getBinaryFromRegister(inst[2]) + getBinaryFromRegister(inst[1])
+    return dictionnaire[inst[0]] + get_binary_from_register(inst[2]) + get_binary_from_register(inst[1])
 
-def getRegisterOpBinary(inst):
+def get_register_op_binary(inst):
     '''_summary_
 
     Generate the binary encoding for a register operation instruction
@@ -207,10 +204,10 @@ def getRegisterOpBinary(inst):
         String: Return the binary encoding for the given register operation instruction
     '''
     inst[0] += "_RO"
-    return dictionnaire[inst[0]] + getBinaryFromImmX(inst[3],5) + getBinaryFromRegister(inst[2]) + getBinaryFromRegister(inst[1])
+    return dictionnaire[inst[0]] + get_binary_from_immx(inst[3],5) + get_binary_from_register(inst[2]) + get_binary_from_register(inst[1])
 
 
-def getArithmeticOperationBinary(inst):
+def get_arithmetic_operation_binary(inst):
     '''_summary_
 
     Generate the binary encoding for an arithmetic operation instruction (add, subtract, etc.)
@@ -224,17 +221,17 @@ def getArithmeticOperationBinary(inst):
     #check if there is 4 args
     if(len(inst) == 4):
         #check if the last arg is a register
-        if(isA(inst[3],"R")): 
+        if(is_a(inst[3],"R")): 
             inst[0] += "_AOR"
-            return dictionnaire[inst[0]] + getBinaryFromRegister(inst[3]) + getBinaryFromRegister(inst[2]) + getBinaryFromRegister(inst[1])
+            return dictionnaire[inst[0]] + get_binary_from_register(inst[3]) + get_binary_from_register(inst[2]) + get_binary_from_register(inst[1])
         else:
             #if its not a register then its a immediate 
             inst[0] += "_AOI"
-            return dictionnaire[inst[0]] + getBinaryFromImmX(inst[3],3) + getBinaryFromRegister(inst[2]) + getBinaryFromRegister(inst[1])
+            return dictionnaire[inst[0]] + get_binary_from_immx(inst[3],3) + get_binary_from_register(inst[2]) + get_binary_from_register(inst[1])
     else:
-        return dictionnaire[inst[0]] + getBinaryFromRegister(inst[1]) + getBinaryFromImmX(inst[2],8)
+        return dictionnaire[inst[0]] + get_binary_from_register(inst[1]) + get_binary_from_immx(inst[2],8)
 
-def getSPStorageBinary(inst):
+def get_sp_storage_binary(inst):
     '''_summary_
 
     Generate the binary encoding for a stack pointer storage instruction (e.g., STR, LDR)
@@ -245,16 +242,22 @@ def getSPStorageBinary(inst):
     Returns:
         String: Return the binary encoding for the given stack pointer storage instruction
     '''
-    
-    inst[0] += "_ST"
-    stripedInst = inst[3].strip()
-    inst[3] = stripedInst[0:len(stripedInst) - 1]
-    inst[3] = divideImmX(inst[3],4)
+
     #We need to divide the immediate by 4 because the stack is composed with blocs of 4 bytes (32 bits)
     #By dividing the immediate we can evaluate how long is the jump of the stack pointer
-    return dictionnaire[inst[0]] + getBinaryFromRegister(inst[1]) + getBinaryFromImmX(inst[3],8)
+    inst[0] += "_ST"
 
-def getSPShiftBinary(inst):
+    if(len(inst) == 4):
+        striped_inst = inst[3].strip()
+        inst[3] = striped_inst[0:len(striped_inst) - 1]
+        inst[3] = divide_immx(inst[3],4)
+        return dictionnaire[inst[0]] + get_binary_from_register(inst[1]) + get_binary_from_immx(inst[3],8)
+    else:
+        return dictionnaire[inst[0]] + get_binary_from_register(inst[1]) + get_binary_from_immx("#0",8)
+
+    
+
+def get_sp_shift_binary(inst):
     '''_summary_
 
     Generate the binary encoding for a stack pointer shift instruction (e.g., ADD, SUB with SP)
@@ -267,26 +270,26 @@ def getSPShiftBinary(inst):
     '''
     
     inst[0] += "_SH"
-    inst[2] = divideImmX(inst[2],4)
-    return dictionnaire[inst[0]] + getBinaryFromImmX(inst[2], 7)
+    inst[2] = divide_immx(inst[2],4)
+    return dictionnaire[inst[0]] + get_binary_from_immx(inst[2], 7)
 
-def getLabelReference(labelName, pc, sizeImm = 8):
+def get_label_reference(label_name, pc, size_imm = 8):
     '''_summary_
 
     Get the binary representation of a label reference (used for branching)
 
     Args:
-        labelName (String): The name of the label
-        sizeImm (int, optional): The size of the immediate value in bits. Defaults to 8.
+        label_name (String): The name of the label
+        size_imm (int, optional): The size of the immediate value in bits. Defaults to 8.
 
     Returns:
         String: Return the binary representation of the label reference
     '''
     
-    labelIndex = int(labels[labelName]) - pc - 3
-    return twoComplement(labelIndex, sizeImm)
+    label_index = int(labels[label_name]) - pc - 3
+    return two_complement(label_index, size_imm)
 
-def getBranchBinary(inst, pc):
+def get_branch_binary(inst, pc):
     '''_summary_
 
     Generate the binary encoding for a branch instruction (e.g., BEQ, BNE)
@@ -298,10 +301,10 @@ def getBranchBinary(inst, pc):
         String: Return the binary encoding for the given branch instruction
     '''
     
-    if(len(inst[0]) == 1): return dictionnaire[inst[0]] + getLabelReference(inst[1], pc, 11)
-    return dictionnaire[inst[0]] + getLabelReference(inst[1], pc)
+    if(len(inst[0]) == 1): return dictionnaire[inst[0]] + get_label_reference(inst[1], pc, 11)
+    return dictionnaire[inst[0]] + get_label_reference(inst[1], pc)
 
-def twoComplement(integer, size):
+def two_complement(integer, size):
     '''_summary_
     
     Convert a base 10 integer into a binary encoded with Two's complement
@@ -319,21 +322,21 @@ def twoComplement(integer, size):
     if(integer < 0): 
         integer *= -1
         binary = str(format(integer, "b"))
-        binary = shiftBit(binary, size)
+        binary = shift_bit(binary, size)
 
         # transform all the 0 in 1 and the 1 in 0
-        reversed = ""
-        for i in range(len(binary)):
-            if(binary[i] == "1"): reversed += "0"
-            else: reversed += "1"
+        reversed_binary = ""
+        for index in range(len(binary)):
+            if(binary[index] == "1"): reversed_binary += "0"
+            else: reversed_binary += "1"
 
-        binary = int(reversed, 2) + 1
+        binary = int(reversed_binary, 2) + 1
         if(binary >= 2**size): return str(format(binary, "b"))[-size:]
         return str(format(binary, "b"))
     else:
-        return shiftBit(str(format(integer, "b")),size)
+        return shift_bit(str(format(integer, "b")),size)
 
-def convertAssemblyToBin(inst, pc):
+def convert_assembly_to_bin(inst, pc):
     '''_summary_
 
     Translate an assembly instruction into its binary representation
@@ -344,143 +347,145 @@ def convertAssemblyToBin(inst, pc):
     Returns:
         String: Return the binary encoding for the given instruction
     '''
+
+    print(inst)
     
     match inst[0]:
 
         case "LSLS":
             if(len(inst) == 4):
-                binary = getRegisterOpBinary(inst)
+                binary = get_register_op_binary(inst)
             else:
-                binary = getDataProcessingBinary(inst)
+                binary = get_data_processing_binary(inst)
         
         case "LSRS":
             if(len(inst) == 4):
-                binary = getRegisterOpBinary(inst)
+                binary = get_register_op_binary(inst)
             else:
-                binary = getDataProcessingBinary(inst) 
+                binary = get_data_processing_binary(inst) 
             
         case "ASRS":
             if(len(inst) == 4):
-                binary = getRegisterOpBinary(inst)
+                binary = get_register_op_binary(inst)
             else:
-                binary = getDataProcessingBinary(inst)
+                binary = get_data_processing_binary(inst)
         
         case "ADDS":
-            binary = getArithmeticOperationBinary(inst)
+            binary = get_arithmetic_operation_binary(inst)
         
         case "SUBS":
-            binary = getArithmeticOperationBinary(inst)
+            binary = get_arithmetic_operation_binary(inst)
         
         case "MOVS":
-            binary = getArithmeticOperationBinary(inst)
+            binary = get_arithmetic_operation_binary(inst)
         
         case "CMP":
-            if(isA(inst[1],"#")):
-                binary = getArithmeticOperationBinary(inst)
+            if(is_a(inst[1],"#")):
+                binary = get_arithmetic_operation_binary(inst)
             else:
-                binary = getDataProcessingBinary(inst)
+                binary = get_data_processing_binary(inst)
         
         case "ANDS":
-            binary = getDataProcessingBinary(inst)
+            binary = get_data_processing_binary(inst)
         
         case "EORS":
-            binary = getDataProcessingBinary(inst)
+            binary = get_data_processing_binary(inst)
         
         case "ADCS":
-            binary = getDataProcessingBinary(inst)
+            binary = get_data_processing_binary(inst)
             
         case "SBCS":
-            binary = getDataProcessingBinary(inst)
+            binary = get_data_processing_binary(inst)
             
         case "RORS":
-            binary = getDataProcessingBinary(inst)
+            binary = get_data_processing_binary(inst)
             
         case "TST":
-            binary = getDataProcessingBinary(inst)
+            binary = get_data_processing_binary(inst)
         
         case "RSBS":
-            binary = getDataProcessingBinary(inst)
+            binary = get_data_processing_binary(inst)
         
         case "CMN":
-            binary = getDataProcessingBinary(inst)
+            binary = get_data_processing_binary(inst)
         
         case "ORRS":
-            binary = getDataProcessingBinary(inst)
+            binary = get_data_processing_binary(inst)
             
         case "MULS":
-            binary = getDataProcessingBinary(inst)
+            binary = get_data_processing_binary(inst)
             
         case "BICS":
-            binary = getDataProcessingBinary(inst)
+            binary = get_data_processing_binary(inst)
         
         case "MVNS":
-            binary = getDataProcessingBinary(inst)
+            binary = get_data_processing_binary(inst)
 
 #       LOAD/STORE
 
         case "STR":
-            binary = getSPStorageBinary(inst)
+            binary = get_sp_storage_binary(inst)
 
         case "LDR":
-            binary = getSPStorageBinary(inst)
+            binary = get_sp_storage_binary(inst)
 
 #       MISCELLANEOUS
 
         case "ADD":
-            binary = getSPShiftBinary(inst)
+            binary = get_sp_shift_binary(inst)
 
         case "SUB":
-            binary = getSPShiftBinary(inst)
+            binary = get_sp_shift_binary(inst)
         
 #       BRANCH
 
         case "BEQ":
-            binary = getBranchBinary(inst, pc) 
+            binary = get_branch_binary(inst, pc) 
 
         case "BNE":
-            binary = getBranchBinary(inst, pc) 
+            binary = get_branch_binary(inst, pc) 
 
         case "BCS":
-            binary = getBranchBinary(inst, pc) 
+            binary = get_branch_binary(inst, pc) 
 
         case "BCC":
-            binary = getBranchBinary(inst, pc) 
+            binary = get_branch_binary(inst, pc) 
 
         case "BMI":
-            binary = getBranchBinary(inst, pc) 
+            binary = get_branch_binary(inst, pc) 
 
         case "BPL":
-            binary = getBranchBinary(inst, pc) 
+            binary = get_branch_binary(inst, pc) 
 
         case "BVS":
-            binary = getBranchBinary(inst, pc) 
+            binary = get_branch_binary(inst, pc) 
 
         case "BHI":
-            binary = getBranchBinary(inst, pc) 
+            binary = get_branch_binary(inst, pc) 
 
         case "BLS":
-            binary = getBranchBinary(inst, pc) 
+            binary = get_branch_binary(inst, pc) 
 
         case "BGE":
-            binary = getBranchBinary(inst, pc) 
+            binary = get_branch_binary(inst, pc) 
 
         case "BLT":
-            binary = getBranchBinary(inst, pc) 
+            binary = get_branch_binary(inst, pc) 
 
         case "BLE":
-            binary = getBranchBinary(inst, pc) 
+            binary = get_branch_binary(inst, pc) 
 
         case "BAL":
-            binary = getBranchBinary(inst, pc)
+            binary = get_branch_binary(inst, pc)
         
         case "B":
-            binary = getBranchBinary(inst, pc)
+            binary = get_branch_binary(inst, pc)
 
         case _: 
-            return ""
+            return "NONE"
     return binary
         
-def sanitizeInput(input):
+def sanitize_input(input):
     '''_summary_
 
     Clean up input by stripping leading and trailing spaces and filtering empty entries
@@ -496,7 +501,7 @@ def sanitizeInput(input):
 
 
 
-def convertBinaryToHexa(binary):
+def convert_binary_to_hex(binary):
     '''_summary_
 
     Convert a binary string to its hexadecimal representation
@@ -510,72 +515,75 @@ def convertBinaryToHexa(binary):
     
     hexa = hex(int(binary,2))[2:]
     if(len(hexa) == 4): return hexa
-    return shiftBit(hexa,4)
+    return shift_bit(hexa,4)
 
-def convertAssemblyToHex(fileName):
+def convert_assembly_to_hex(file_name):
     '''_summary_
     
     Read an assembly file and write, in hexadecimal, the non empty or non comments lines into a file
 
     Args:
-        fileName (Path/String): Path of the assembly file
+        file_name (Path/String): Path of the assembly file
         
     Returns:
         void
     '''
     
     hexadecimals = []           # Hexadecimals values that will be written in the file
-    filteredInstructions = []   # Formated instructions
+    filtered_instructions = []   # Formated instructions
     PC = 0                      # Program Counter
 
     try:
-        with open(fileName, 'r') as fichier:
+        with open(file_name, 'r') as fichier:
             instructions = fichier.read().splitlines()
             # Filter empty elements
             instructions = [line for line in instructions if line.strip()]
 
         # init the label and sanitize all the instructions
         for inst in instructions:
-            inst = sanitizeInput(splitInstruction(inst.upper()))
+            inst = sanitize_input(split_instruction(inst.upper()))
             if not inst or inst[0].startswith(';') or inst[0].startswith('#') or inst[0].startswith('@'):       # Remove non usefull line
                 continue
             elif (inst[0].startswith('.')): 
                 labels[inst[0][0:len(inst[0])-1]] = PC         # Adding the new label with the program counter value in the label dictionnary
                 continue
             PC += 1
-            filteredInstructions.append(inst)
+            filtered_instructions.append(inst)
 
+        print(filtered_instructions)
         PC = 0
-        for filteredInst in filteredInstructions:
-            filteredInst = convertAssemblyToBin(filteredInst, PC) # Get the binary representation of the instruction
+        for filtered_inst in filtered_instructions:
+            filtered_inst = convert_assembly_to_bin(filtered_inst, PC) # Get the binary representation of the instruction
+            if(filtered_inst == "NONE"):
+                continue
             PC += 1
-            hexadecimals.append(convertBinaryToHexa(filteredInst)) # Convert the binary representation in hexadecimal and add it to the list
+            hexadecimals.append(convert_binary_to_hex(filtered_inst)) # Convert the binary representation in hexadecimal and add it to the list
  
     except FileNotFoundError:
-        print(f"Erreur : Le fichier '{fileName}' n'existe pas.")
+        print(f"Erreur : Le fichier '{file_name}' n'existe pas.")
     except Exception as e:
         print(f"Une erreur est survenue : {e}")
     
     return hexadecimals
 
-def writeFile(hexadecimals, fileName = './output.bin'):
+def write_file(hexadecimals, file_name = './output.bin'):
     '''_summary_
         Write the content of hexadecimals in a .bin file
         
         Args:
             hexadecimals (List): List of hexadecimals
-            fileName (Path/String): Path to the output file
+            file_name (Path/String): Path to the output file
             
         Returns:
             void
     '''
     
-    with open(fileName, 'w') as file:
+    with open(file_name, 'w') as file:
         file.write('v2.0 raw\n')
         for hexa in hexadecimals:
             file.write(hexa + ' ')
 
 
-fileName = "./../test_integration/conditional/branch.s"
+file_name = str(input("Enter file path: "))
 
-writeFile(convertAssemblyToHex(fileName))
+write_file(convert_assembly_to_hex(file_name))
