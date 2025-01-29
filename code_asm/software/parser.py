@@ -48,7 +48,9 @@ dictionnaire = {
     "BEQ":     "11010000",
     "BNE":     "11010001",
     "BCS":     "11010010",
+    "BHS":     "11010010",
     "BCC":     "11010011",
+    "BLO":     "11010011",
     "BMI":     "11010100",
     "BPL":     "11010101",
     "BVS":     "11010110",
@@ -270,8 +272,8 @@ def get_sp_shift_binary(inst):
     '''
     
     inst[0] += "_SH"
-    inst[2] = divide_immx(inst[2],4)
-    return dictionnaire[inst[0]] + get_binary_from_immx(inst[2], 7)
+    inst[-1] = divide_immx(inst[-1],4)
+    return dictionnaire[inst[0]] + get_binary_from_immx(inst[-1], 7)
 
 def get_label_reference(label_name, pc, size_imm = 8):
     '''_summary_
@@ -347,8 +349,6 @@ def convert_assembly_to_bin(inst, pc):
     Returns:
         String: Return the binary encoding for the given instruction
     '''
-
-    print(inst)
     
     match inst[0]:
 
@@ -544,17 +544,18 @@ def convert_assembly_to_hex(file_name):
             inst = sanitize_input(split_instruction(inst.upper()))
             if not inst or inst[0].startswith(';') or inst[0].startswith('#') or inst[0].startswith('@'):       # Remove non usefull line
                 continue
-            elif (inst[0].startswith('.')): 
+            elif (inst[0].startswith('.') or inst[0].endswith(':')): 
                 labels[inst[0][0:len(inst[0])-1]] = PC         # Adding the new label with the program counter value in the label dictionnary
                 continue
             PC += 1
             filtered_instructions.append(inst)
 
-        print(filtered_instructions)
         PC = 0
         for filtered_inst in filtered_instructions:
             filtered_inst = convert_assembly_to_bin(filtered_inst, PC) # Get the binary representation of the instruction
-            if(filtered_inst == "NONE"):
+            if(filtered_inst == "NONE"): 
+                hexadecimals.append("XXXX")
+                PC += 1
                 continue
             PC += 1
             hexadecimals.append(convert_binary_to_hex(filtered_inst)) # Convert the binary representation in hexadecimal and add it to the list
