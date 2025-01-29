@@ -350,8 +350,7 @@ def convert_assembly_to_bin(inst, pc):
     Returns:
         String: Return the binary encoding for the given instruction
     '''
-    print(inst)
-
+    
     match inst[0]:
 
         case "LSLS":
