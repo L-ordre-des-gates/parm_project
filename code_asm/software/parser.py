@@ -12,10 +12,10 @@ dictionnaire = {
     "SUBS_AOR":"0001101",
     "ADDS_AOI":"0001110",
     "SUBS_AOI":"0001111",
-    "MOVS":    "00100",
-    "CMP_AO":  "00101",
-    "ADDS":    "00110",
-    "SUBS":    "00111",
+    "MOVS_AO":    "00100",
+    "CMP_AO":   "00101",
+    "ADDS_AO":    "00110",
+    "SUBS_AO":    "00111",
 
 #   DATA PROCESSING
 
@@ -231,6 +231,7 @@ def get_arithmetic_operation_binary(inst):
             inst[0] += "_AOI"
             return dictionnaire[inst[0]] + get_binary_from_immx(inst[3],3) + get_binary_from_register(inst[2]) + get_binary_from_register(inst[1])
     else:
+        inst[0] += "_AO"
         return dictionnaire[inst[0]] + get_binary_from_register(inst[1]) + get_binary_from_immx(inst[2],8)
 
 def get_sp_storage_binary(inst):
@@ -270,7 +271,7 @@ def get_sp_shift_binary(inst):
     Returns:
         String: Return the binary encoding for the given stack pointer shift instruction
     '''
-    
+    if(len(inst) > 3): return "NONE"
     inst[0] += "_SH"
     inst[-1] = divide_immx(inst[-1],4)
     return dictionnaire[inst[0]] + get_binary_from_immx(inst[-1], 7)
@@ -349,7 +350,8 @@ def convert_assembly_to_bin(inst, pc):
     Returns:
         String: Return the binary encoding for the given instruction
     '''
-    
+    print(inst)
+
     match inst[0]:
 
         case "LSLS":
@@ -377,10 +379,16 @@ def convert_assembly_to_bin(inst, pc):
             binary = get_arithmetic_operation_binary(inst)
         
         case "MOVS":
-            binary = get_arithmetic_operation_binary(inst)
+            #If it's a classic MOVS
+            if(is_a(inst[-1],"#")): binary = get_arithmetic_operation_binary(inst)
+            #If it's a MOVS between 2 register
+            else: 
+                inst[0] = "LSLS"
+                inst.append("#0")
+                binary = get_register_op_binary(inst)
         
         case "CMP":
-            if(is_a(inst[1],"#")):
+            if(is_a(inst[2],"#")):
                 binary = get_arithmetic_operation_binary(inst)
             else:
                 binary = get_data_processing_binary(inst)
@@ -553,12 +561,10 @@ def convert_assembly_to_hex(file_name):
         PC = 0
         for filtered_inst in filtered_instructions:
             filtered_inst = convert_assembly_to_bin(filtered_inst, PC) # Get the binary representation of the instruction
-            if(filtered_inst == "NONE"): 
-                hexadecimals.append("XXXX")
-                PC += 1
-                continue
+            if(filtered_inst != "NONE"):
+                hexadecimals.append(convert_binary_to_hex(filtered_inst)) # Convert the binary representation in hexadecimal and add it to the list
             PC += 1
-            hexadecimals.append(convert_binary_to_hex(filtered_inst)) # Convert the binary representation in hexadecimal and add it to the list
+            
  
     except FileNotFoundError:
         print(f"Erreur : Le fichier '{file_name}' n'existe pas.")
